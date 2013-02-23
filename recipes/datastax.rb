@@ -43,3 +43,16 @@ service "cassandra" do
   supports :restart => true, :status => true
   action [:enable, :start]
 end
+
+template "/etc/init.d/cassandra" do
+  source "cassandra.init.erb"
+  owner 'root'
+  mode  0755
+end
+
+template File.join(node.cassandra.conf_dir, "cassandra.yaml") do
+  source "cassandra.yaml.erb"
+  owner node.cassandra.user
+  group node.cassandra.user
+  mode  0644
+end
